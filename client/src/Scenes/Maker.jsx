@@ -7,14 +7,10 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MakerForm from "../Components/MakerForm";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -50,9 +46,9 @@ const Maker = () => {
   }, []);
 
   return (
-    <div container spacing={2}>
+    <div className="flex justify-center items-center py-10">
       {jobs.map((job) => (
-        <Card key={job.id} sx={{ maxWidth: 345 }}>
+        <Card key={job.id} sx={{ maxWidth: 600 }}>
           <CardHeader title={job.first_name} subheader={job.last_name} />
           <CardMedia
             component="img"
@@ -62,13 +58,55 @@ const Maker = () => {
             className="object-cover rounded-lg px-2"
           />
           <CardContent>
-            <Typography variant="h6" gutterBottom>
-              {job.first_name} {job.last_name}
+            <Typography variant="body2" color="text.secondary">
+              {job.description}
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              {job.clothing_type}
+            <Typography variant="body2" color="text.secondary">
+              {job.state}
             </Typography>
           </CardContent>
+          <CardActions disableSpacing>
+            <ExpandMore
+              expand={expanded}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {job.first_name} {job.last_name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.clothing_type}{" "}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.budget}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.phone_number}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.description}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.email}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.address}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.postcode}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {job.state}
+              </Typography>
+              <MakerForm />
+            </CardContent>
+          </Collapse>
         </Card>
       ))}
     </div>
