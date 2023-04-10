@@ -19,6 +19,9 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import Application from '@ioc:Adonis/Core/Application';
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import fs from 'fs';
 
 Route.group(() => {
   // Consumer Routes
@@ -44,4 +47,7 @@ Route.group(() => {
   
 }).prefix('api/v1')
 
-
+Route.get('/uploads/:filename', async ({ params, response }: HttpContextContract) => {
+  const filePath = Application.makePath('public', 'uploads', params.filename)
+  return response.download(filePath)
+})

@@ -20,10 +20,20 @@
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "@adonisjs/lucid"
+    "@adonisjs/lucid",
+    "@adonisjs/drive-s3"
   ],
   "aceProviders": [
     "@adonisjs/repl"
+  ],
+  "directories": {
+    "public": "public"
+  },
+  "metaFiles": [
+    {
+      "pattern": "public/**",
+      "reloadServer": false
+    }
   ],
   "tests": {
     "suites": [

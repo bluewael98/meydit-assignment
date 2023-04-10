@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Job from 'App/Models/Job'
 import { schema } from '@ioc:Adonis/Core/Validator'
+import Drive from '@ioc:Adonis/Core/Drive';
+import fs from 'fs'
 
 export default class JobsController {
 
@@ -19,21 +21,46 @@ public async store ({request, response}: HttpContextContract ) {
    postcode: schema.string(),
    state: schema.string(),
    clothing_type: schema.string(),
-   image: schema.string(),
+   image: schema.file({
+    size: '2mb',
+    extnames: ['jpg', 'png', 'jpeg'],
+  }),
    description: schema.string(),
    budget: schema.string.optional(),
 })
-  const data = await request.validate({schema: jobSchema})
-  const job = await Job.create(data)
+const payload = await request.validate({ schema: jobSchema })
 
-  return response.json(job)
-  
+// Get the uploaded image
+const image = request.file('image')
+
+if (!image || !image.tmpPath) {
+  return response.badRequest('Image is required')
 }
 
-public async show ({params, response}: HttpContextContract) {
- const job = await Job.findByOrFail(params.id, response)
-  
-  response.json(job)
+const imageName = `${Date.now()}.${image.extname}`
+const imagePath = `jobs/${imageName}`
+
+try {
+  const contentType = image.headers['content-type'] || 'application/octet-stream'
+
+  // Upload the image to the S3 bucket with the correct content type
+  await Drive.use('s3').putStream(imagePath, fs.createReadStream(image.tmpPath as string), {
+    contentType: contentType,
+    visibility: 'public',
+  })
+
+  // Create the job with the uploaded image URL
+  const imageUrl = await Drive.use('s3').getUrl(imagePath)
+  const job = await Job.create({
+    ...payload,
+    image: imageUrl,
+  })
+
+  return response.created(job)
+} catch (error) {
+  console.log(error)
+  return response.internalServerError('Something went wrong while uploading the image')
+}
 }
 
 
@@ -52,7 +79,7 @@ public async update({params, request, response}: HttpContextContract) {
     'budget',
   ])
 
-  const job = await Job.findByOrFail(params.id, response)
+  const job = await Job.findByOrFail('id', params.id)
 
   job.merge(data)
 
@@ -62,7 +89,7 @@ public async update({params, request, response}: HttpContextContract) {
 }
 
 public async destroy ({ params, response }: HttpContextContract) {
-  const job = await Job.findByOrFail(params.id, response)
+  const job = await Job.findByOrFail('id', params.id)
 
   await job.delete()
 

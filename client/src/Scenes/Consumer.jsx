@@ -17,27 +17,33 @@ const Consumer = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = async (data) => {
     try {
+      // Convert the data to FormData
+      const formData = new FormData();
+      for (const key in data) {
+        if (key === "image") {
+          formData.append(key, data[key][0]);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+
       const response = await axios.post(
         "http://localhost:3333/api/v1/jobs/",
-        data
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
       console.log("Job Created", response.data);
     } catch (error) {
-      console.error("Error creating job:", error);
+      console.error("Error creating job:", error.response.data);
     }
   };
-
   // Clothing Type categories
-  const categories = [
-    "Select Clothing Type",
-    "Shirt",
-    "Pants",
-    "Dress",
-    "Ethnic Wear",
-    "Skirt",
-  ];
+  const categories = ["Shirt", "Pants", "Dress", "Ethnic Wear", "Skirt"];
   const [clothing_type, setClothingType] = useState(categories[0]);
   const { onChange: onClothingTypeChange } = register("clothing_type", {
     required: true,
@@ -164,15 +170,15 @@ const Consumer = () => {
         </FormControl>
 
         {/* Image */}
-        <TextField
-          label="Image"
+        <label htmlFor="image">Image:</label>
+        <input
+          type="file"
+          id="image"
           name="image"
-          variant="outlined"
-          fullWidth
+          accept="image/*"
           {...register("image", { required: true })}
-          error={Boolean(errors.image)}
-          helperText={errors.image && "Image is required."}
         />
+        {errors.image && <p>Image is required.</p>}
 
         {/* Description */}
         <TextField
