@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { Button } from "@mui/material";
 import axios from "axios";
 import {
   TextField,
@@ -203,7 +204,20 @@ const Consumer = () => {
         />
 
         {/* Submit */}
-        <button type="submit">Submit job</button>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            bgcolor: "#8460C2",
+            "&:hover": {
+              opacity: 0.8,
+              bgcolor: "#8460C2",
+              transition: "0.3s",
+            },
+          }}
+        >
+          Submit job
+        </Button>
       </form>
     </section>
   );

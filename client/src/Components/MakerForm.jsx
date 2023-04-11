@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { TextField } from "@mui/material";
+import { TextField, Button, Typography } from "@mui/material";
 
-const MakerForm = () => {
+const MakerForm = ({ consumerData }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const [submissionCount, setSubmissionCount] = useState(0);
+
+  const onSubmit = async (formData) => {
     try {
       const response = await axios.post(
         "http://localhost:3333/api/v1/makers/",
-        data
+        formData
       );
       console.log("Maker Created", response.data);
+      setSubmissionCount(submissionCount + 1);
+
+      // send confirmation emails;
+      await axios.post("http://localhost:3333/api/v1/send-email", {
+        ...formData,
+        consumer: consumerData,
+      });
     } catch (error) {
       console.error("Error creating maker:", error.response.data);
     }
   };
 
   return (
-    <section className="flex flex-col justify-center items-center py-10">
+    <section className="flex flex-col justify-center items-center ">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col w-2/3 gap-4"
+        className="flex flex-col w-full gap-4"
       >
         {/* Name */}
         <TextField
@@ -78,14 +87,37 @@ const MakerForm = () => {
           name="comments"
           variant="outlined"
           fullWidth
+          minRows="4"
+          multiline="true"
+          inputProps={{ maxLength: 1000 }}
           {...register("comments", { required: true })}
           error={Boolean(errors.comments)}
           helperText={errors.comments && "Comments are required."}
         />
 
         {/* Submit */}
-        <button type="submit">Submit maker</button>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            bgcolor: "#8460C2",
+            "&:hover": {
+              opacity: 0.8,
+              bgcolor: "#8460C2",
+              transition: "0.3s",
+            },
+          }}
+        >
+          Submit quote
+        </Button>
       </form>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ marginY: "1REM" }}
+      >
+        Quotes submitted: {submissionCount}
+      </Typography>
     </section>
   );
 };

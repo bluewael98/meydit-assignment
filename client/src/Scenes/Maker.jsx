@@ -10,7 +10,12 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EmailIcon from "@mui/icons-material/Email";
+import HomeIcon from "@mui/icons-material/Home";
+import Person2Icon from "@mui/icons-material/Person2";
 import MakerForm from "../Components/MakerForm";
+import { formatDistance } from "date-fns";
+import { enAU } from "date-fns/locale";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -49,7 +54,11 @@ const Maker = () => {
     <div className="flex justify-center items-center py-10">
       {jobs.map((job) => (
         <Card key={job.id} sx={{ maxWidth: 600 }}>
-          <CardHeader title={job.first_name} subheader={job.last_name} />
+          <CardHeader
+            title={job.first_name}
+            subheader={job.last_name}
+            className="text-primary"
+          />
           <CardMedia
             component="img"
             height="200"
@@ -57,14 +66,44 @@ const Maker = () => {
             alt="job image"
             className="object-cover rounded-lg px-2"
           />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {job.description}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {job.state}
-            </Typography>
-          </CardContent>
+          {expanded ? (
+            ""
+          ) : (
+            <CardContent className="gap-1 flex flex-col">
+              <div>
+                <Typography variant="body1" color="text.primary">
+                  Clothing Type
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {job.clothing_type}{" "}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant="body1" color="text.primary">
+                  Job Description
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {job.description}
+                </Typography>
+              </div>
+              <Typography variant="body2" className=" text-green-600">
+                Posted{" "}
+                {formatDistance(new Date(job.created_at), new Date(), {
+                  locale: enAU,
+                })}{" "}
+                ago.
+              </Typography>
+            </CardContent>
+          )}
+
           <CardActions disableSpacing>
             <ExpandMore
               expand={expanded}
@@ -76,35 +115,53 @@ const Maker = () => {
             </ExpandMore>
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {job.first_name} {job.last_name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.clothing_type}{" "}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.budget}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.phone_number}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.description}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.email}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.address}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.postcode}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {job.state}
-              </Typography>
-              <MakerForm />
+            <CardContent className="flex flex-col gap-3">
+              <div className="flex gap-1 flex-col">
+                <Typography variant="body1" color="text.primary">
+                  Customer details
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Person2Icon /> {job.first_name} {job.last_name}.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <HomeIcon /> {job.address} {job.postcode}, {job.state}.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <EmailIcon /> {job.email}
+                </Typography>
+              </div>
+              <div className="flex flex-col gap-1">
+                <>
+                  <Typography variant="body1" color="text.primary">
+                    Job Description
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {job.description}
+                  </Typography>
+                </>
+                <>
+                  <Typography variant="body1" color="text.primary">
+                    Clothing Type
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {job.clothing_type}{" "}
+                  </Typography>
+                </>
+                <>
+                  <Typography variant="body1" color="text.primary">
+                    Budget
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {job.budget}
+                  </Typography>
+                </>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Typography variant="body1" color="text.primary">
+                  Submit Quote:
+                </Typography>
+                <MakerForm makerData={job} />
+              </div>
             </CardContent>
           </Collapse>
         </Card>

@@ -21,7 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 import Application from '@ioc:Adonis/Core/Application';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import fs from 'fs';
+
 
 Route.group(() => {
   // Consumer Routes
@@ -44,6 +44,9 @@ Route.group(() => {
   Route.get('/jobs/:id', 'JobsController.show')
   Route.put('/jobs/:id', 'JobsController.update')
   Route.delete('/jobs/:id', 'JobsController.destroy')
+
+  // Email
+  Route.post('/send-email', 'MailController.sendEmail')
   
 }).prefix('api/v1')
 

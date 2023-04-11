@@ -10,7 +10,7 @@
 */
 
 import Server from '@ioc:Adonis/Core/Server'
-import StaticMiddle from 'App/Middleware/static'
+
 /*
 |--------------------------------------------------------------------------
 | Global middleware
