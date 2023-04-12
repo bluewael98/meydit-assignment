@@ -160,7 +160,7 @@ const Maker = () => {
                 <Typography variant="body1" color="text.primary">
                   Submit Quote:
                 </Typography>
-                <MakerForm makerData={job} />
+                <MakerForm consumerData={job} />
               </div>
             </CardContent>
           </Collapse>
