@@ -1,7 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import axios from "axios";
+
 import {
   TextField,
   FormControl,
@@ -39,32 +46,50 @@ const Consumer = () => {
         }
       );
       console.log("Job Created", response.data);
+      handleDialogOpen();
     } catch (error) {
       console.error("Error creating job:", error.response.data);
     }
   };
   // Clothing Type categories
   const categories = ["Shirt", "Pants", "Dress", "Ethnic Wear", "Skirt"];
-  const [clothing_type, setClothingType] = useState(categories[0]);
+  const [clothing_type, setClothingType] = useState("");
   const { onChange: onClothingTypeChange } = register("clothing_type", {
     required: true,
   });
-  const handleChange = useCallback(
-    (e) => {
-      onClothingTypeChange(e);
-      setClothingType(e.target.value);
-    },
-    [onClothingTypeChange]
-  );
+  const handleChange = (event) => {
+    const newClothingType = event.target.value;
+    setClothingType(newClothingType);
+    onClothingTypeChange({
+      target: {
+        name: "clothing_type",
+        value: newClothingType,
+      },
+    });
+  };
+
+  // Dialog
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
 
   return (
-    <section className="flex flex-col justify-center items-center py-10">
+    <section className="flex flex-col justify-center items-center py-10 px-4 mt-[50px]">
+      <div className=" flex justify-center items-center py-10 text-4xl font-Roboto text-primary">
+        <h1>CONSUMERS</h1>
+      </div>
+
       <form
         onSubmit={handleSubmit((data) => {
           console.log("handleSubmit called");
           onSubmit(data);
         })}
-        className="flex flex-col w-2/3 gap-4"
+        className="flex flex-col w-full max-w-[600px] gap-4"
       >
         {/* First Name */}
         <TextField
@@ -171,13 +196,16 @@ const Consumer = () => {
         </FormControl>
 
         {/* Image */}
-        <label htmlFor="image">Image:</label>
+        <label htmlFor="image" className="font-Roboto w-16px text-[#695C64]">
+          Upload Image:
+        </label>
         <input
           type="file"
           id="image"
           name="image"
           accept="image/*"
           {...register("image", { required: true })}
+          className=" cursor-pointer font-Roboto w-16px text-[#695C64]"
         />
         {errors.image && <p>Image is required.</p>}
 
@@ -204,21 +232,34 @@ const Consumer = () => {
         />
 
         {/* Submit */}
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{
-            bgcolor: "#8460C2",
-            "&:hover": {
-              opacity: 0.8,
+        <div className="flex justify-end">
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
               bgcolor: "#8460C2",
-              transition: "0.3s",
-            },
-          }}
-        >
-          Submit job
-        </Button>
+              "&:hover": {
+                opacity: 0.8,
+                bgcolor: "#8460C2",
+                transition: "0.3s",
+              },
+            }}
+          >
+            Submit job
+          </Button>
+        </div>
       </form>
+
+      {/* Dialog */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Job Successfully Submitted</DialogTitle>
+        <DialogContent>Your job has been submitted successfully.</DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 };

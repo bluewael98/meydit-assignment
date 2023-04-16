@@ -13,6 +13,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmailIcon from "@mui/icons-material/Email";
 import HomeIcon from "@mui/icons-material/Home";
 import Person2Icon from "@mui/icons-material/Person2";
+import PhoneIcon from "@mui/icons-material/Phone";
 import MakerForm from "../Components/MakerForm";
 import { formatDistance } from "date-fns";
 import { enAU } from "date-fns/locale";
@@ -51,9 +52,12 @@ const Maker = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center py-10">
+    <div className="flex flex-col justify-center items-center py-10 gap-5 mt-[50px] px-4 w-screen overflow-hidden">
+      <div className=" flex justify-center items-center py-10 text-4xl font-Roboto text-primary w-full">
+        <h1>MAKERS</h1>
+      </div>
       {jobs.map((job) => (
-        <Card key={job.id} sx={{ maxWidth: 600 }}>
+        <Card key={job.id} sx={{ maxWidth: 600 }} className="w-full">
           <CardHeader
             title={job.first_name}
             subheader={job.last_name}
@@ -129,6 +133,9 @@ const Maker = () => {
                 <Typography variant="body2" color="text.secondary">
                   <EmailIcon /> {job.email}
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <PhoneIcon /> {job.phone_number}
+                </Typography>
               </div>
               <div className="flex flex-col gap-1">
                 <>
@@ -160,8 +167,11 @@ const Maker = () => {
                 <Typography variant="body1" color="text.primary">
                   Submit Quote:
                 </Typography>
-                <MakerForm consumerData={job} />
+                <MakerForm consumerData={job} jobId={job.id} />
               </div>
+              <Typography variant="body2" color="text.secondary">
+                Quotes Submitted: {job.submissions}
+              </Typography>
             </CardContent>
           </Collapse>
         </Card>

@@ -1,3 +1,5 @@
+const { RoundaboutLeft } = require('@mui/icons-material');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{html,js,jsx}"],
@@ -14,7 +16,8 @@ module.exports = {
       fontFamily: {
         Oswald: ["inter, sans-serif"],
         Charter: ["Charter, serif"],
-        Bebas: ["Bebas Neue, sans-serif"]
+        Bebas: ["Bebas Neue, sans-serif"],
+        Roboto: ["Roboto, sans-serif"]
       },
     
       screens: {

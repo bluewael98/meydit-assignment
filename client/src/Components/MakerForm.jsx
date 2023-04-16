@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { TextField, Button, Typography } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 
-const MakerForm = ({ consumerData }) => {
+const MakerForm = ({ consumerData, jobId }) => {
   const {
     register,
     handleSubmit,
@@ -26,6 +26,13 @@ const MakerForm = ({ consumerData }) => {
         ...formData,
         consumer: consumerData,
       });
+
+      // Update submission count for the job
+      await axios.put(`http://localhost:3333/api/v1/jobs/${jobId}`, {
+        submissions: submissionCount + 1,
+      });
+
+      setSubmissionCount(submissionCount + 1);
     } catch (error) {
       console.error("Error creating maker:", error.response.data);
     }
@@ -111,13 +118,6 @@ const MakerForm = ({ consumerData }) => {
           Submit quote
         </Button>
       </form>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ marginY: "1REM" }}
-      >
-        Quotes submitted: {submissionCount}
-      </Typography>
     </section>
   );
 };
