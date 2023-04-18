@@ -63,6 +63,7 @@
     "aws-sdk": "^2.1353.0",
     "buffer-alloc": "^1.2.0",
     "file-type": "^18.2.1",
+    "klona": "^2.0.6",
     "pg": "^8.10.0",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",

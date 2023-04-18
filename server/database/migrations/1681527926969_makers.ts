@@ -19,3 +19,5 @@ export default class Makers extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
+
+

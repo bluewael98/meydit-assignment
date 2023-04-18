@@ -17,6 +17,7 @@ export default class Jobs extends BaseSchema {
       table.string('image', 225).notNullable()
       table.string('description', 225).notNullable()
       table.string('budget', 225).notNullable()
+      table.integer('submissions').defaultTo(0)
       table.timestamps(true)
     })
   }

@@ -39,6 +39,9 @@ export default class Job extends BaseModel {
   public budget: string
 
   @column()
+  public submissions: number
+
+  @column()
   public status: 'pending' | 'accepted' | 'rejected' 
 
 

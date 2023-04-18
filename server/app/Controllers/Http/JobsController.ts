@@ -27,6 +27,7 @@ public async store ({request, response}: HttpContextContract ) {
   }),
    description: schema.string(),
    budget: schema.string.optional(),
+   submissions: schema.number.optional(),
 })
 const payload = await request.validate({ schema: jobSchema })
 
@@ -77,6 +78,7 @@ public async update({params, request, response}: HttpContextContract) {
     'image',
     'description',
     'budget',
+    'submissions',
   ])
 
   const job = await Job.findByOrFail('id', params.id)
