@@ -3,4 +3,16 @@ branch-defaults:
     environment: null
     group_suffix: null
 global:
+  application_name: Meydit_Assignment
+  branch: master
+  default_ec2_keyname: null
+  default_platform: Node.js 18 running on 64bit Amazon Linux 2
+  default_region: ap-southeast-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
   profile: eb-cli
+  repository: Meydit_Assignment
+  sc: git
+  workspace_type: Application
