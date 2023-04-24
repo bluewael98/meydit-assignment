@@ -39,7 +39,7 @@ const Consumer = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3333/api/v1/jobs/",
+        "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/jobs",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

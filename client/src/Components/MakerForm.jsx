@@ -15,22 +15,28 @@ const MakerForm = ({ consumerData, jobId }) => {
   const onSubmit = async (formData) => {
     try {
       const response = await axios.post(
-        "http://localhost:3333/api/v1/makers/",
+        "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/makers/",
         formData
       );
       console.log("Maker Created", response.data);
       setSubmissionCount(submissionCount + 1);
 
       // send confirmation emails;
-      await axios.post("http://localhost:3333/api/v1/send-email", {
-        ...formData,
-        consumer: consumerData,
-      });
+      await axios.post(
+        "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/send-email",
+        {
+          ...formData,
+          consumer: consumerData,
+        }
+      );
 
       // Update submission count for the job
-      await axios.put(`http://localhost:3333/api/v1/jobs/${jobId}`, {
-        submissions: submissionCount + 1,
-      });
+      await axios.put(
+        `http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/jobs/${jobId}`,
+        {
+          submissions: submissionCount + 1,
+        }
+      );
 
       setSubmissionCount(submissionCount + 1);
     } catch (error) {

@@ -41,7 +41,9 @@ const Maker = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:3333/api/v1/jobs/");
+        const response = await axios.get(
+          "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/jobs"
+        );
         setJobs(response.data);
         console.log("Jobs fetched", response.data);
       } catch (error) {
