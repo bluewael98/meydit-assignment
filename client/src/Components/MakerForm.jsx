@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { TextField, Button } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 
 const MakerForm = ({ consumerData, jobId }) => {
   const {
@@ -39,9 +46,20 @@ const MakerForm = ({ consumerData, jobId }) => {
       );
 
       setSubmissionCount(submissionCount + 1);
+      handleDialogOpen();
     } catch (error) {
       console.error("Error creating maker:", error.response.data);
     }
+  };
+
+  // Dialog
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
   };
 
   return (
@@ -124,6 +142,18 @@ const MakerForm = ({ consumerData, jobId }) => {
           Submit quote
         </Button>
       </form>
+      {/* Dialog */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Job Successfully Submitted</DialogTitle>
+        <DialogContent>
+          Your quote has been submitted successfully.
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 };
