@@ -42,7 +42,7 @@ const Maker = () => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
-          "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/jobs"
+          "https://backend.waelmarketplace.com/api/v1/jobs"
         );
         setJobs(response.data);
         console.log("Jobs fetched", response.data);

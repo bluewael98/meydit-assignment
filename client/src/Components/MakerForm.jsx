@@ -22,7 +22,7 @@ const MakerForm = ({ consumerData, jobId }) => {
   const onSubmit = async (formData) => {
     try {
       const response = await axios.post(
-        "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/makers/",
+        "https://backend.waelmarketplace.com/api/v1/makers/",
         formData
       );
       console.log("Maker Created", response.data);
@@ -30,7 +30,7 @@ const MakerForm = ({ consumerData, jobId }) => {
 
       // send confirmation emails;
       await axios.post(
-        "http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/send-email",
+        "https://backend.waelmarketplace.com/api/v1/send-email",
         {
           ...formData,
           consumer: consumerData,
@@ -39,7 +39,7 @@ const MakerForm = ({ consumerData, jobId }) => {
 
       // Update submission count for the job
       await axios.put(
-        `http://meyditserverapplication-dev.ap-southeast-2.elasticbeanstalk.com/api/v1/jobs/${jobId}`,
+        `https://backend.waelmarketplace.com/api/v1/jobs/${jobId}`,
         {
           submissions: submissionCount + 1,
         }
